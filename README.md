@@ -162,6 +162,31 @@ GEMINI_MODEL=gemini-2.5-flash
 VITE_API_URL=http://localhost:5000/api
 ```
 
+## Render Deployment
+
+The backend must receive its environment variables from the Render service settings. Do not commit `server/.env` or place `GEMINI_API_KEY` in the client environment.
+
+In the Render backend service, open **Environment** and add:
+
+```env
+PORT=10000
+MONGO_URI=your_mongodb_connection
+JWT_SECRET=your_secret_key
+CLIENT_URL=https://your-frontend-domain.vercel.app
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+After saving the variables, trigger a new deployment. The frontend must be built with the deployed backend URL:
+
+```env
+VITE_API_URL=https://your-backend-domain.onrender.com/api
+```
+
+Environment variables are read at server startup, so changing `GEMINI_API_KEY` requires a backend redeploy or restart.
+
+> **Security:** If credentials were ever committed or shared, rotate the Gemini API key, MongoDB password, and JWT secret, then remove `.env` files from Git tracking and history.
+
 ---
 
 # ▶ Running the Project
