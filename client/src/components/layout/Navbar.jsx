@@ -26,33 +26,33 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-8">
 
-          <Link
-            to="/"
+          <a
+            href="#features"
             className="text-slate-300 hover:text-white transition"
           >
             Features
-          </Link>
+          </a>
 
-          <Link
-            to="/"
+          <a
+            href="#analytics"
             className="text-slate-300 hover:text-white transition"
           >
             Analytics
-          </Link>
+          </a>
 
-          <Link
-            to="/"
+          <a
+            href="#pricing"
             className="text-slate-300 hover:text-white transition"
           >
             Pricing
-          </Link>
+          </a>
 
-          <Link
-            to="/"
+          <a
+            href="#about"
             className="text-slate-300 hover:text-white transition"
           >
             About
-          </Link>
+          </a>
 
         </div>
 

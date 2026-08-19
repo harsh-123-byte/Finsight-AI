@@ -35,7 +35,7 @@ const stats = [
 
 const Stats = () => {
   return (
-    <section className="py-28">
+    <section id="analytics" className="scroll-mt-20 py-28">
 
       <Container>
 

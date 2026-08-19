@@ -4,6 +4,7 @@ const require = createRequire(import.meta.url);
 const pdfParseModule = require("pdf-parse");
 const pdfParse = pdfParseModule && pdfParseModule.default ? pdfParseModule.default : pdfParseModule;
 import Transaction from "../models/Transaction.js";
+import { generateGeminiTransactions } from "../services/geminiService.js";
 
 let pdfjsLib = null;
 try {
@@ -161,10 +162,10 @@ export const uploadStatement = async (req, res) => {
     const originalName = req.file.originalname.toLowerCase();
     const text = fileBuffer.toString("utf-8");
 
-    let transactions = [];
+    let statementText = "";
 
     if (originalName.endsWith(".csv") || req.file.mimetype.includes("csv")) {
-      transactions = parseCsv(text);
+      statementText = text;
     } else if (
       originalName.endsWith(".pdf") || req.file.mimetype.includes("pdf")
     ) {
@@ -256,18 +257,18 @@ export const uploadStatement = async (req, res) => {
 
             console.log("PDF parsed using pdfjs-dist fallback, length:", fullText.length);
 
-            transactions = parsePdfText(fullText);
+            statementText = fullText;
           } catch (err) {
             console.error("pdfjs-dist fallback failed:", err.message);
             throw new Error("PDF parsing failed using all available parsers.");
           }
         } else {
           console.log("PDF parsed using fallback strategy");
-          transactions = parsePdfText(data.text);
+          statementText = data.text;
         }
       } else {
         const data = await parsePdfFn(fileBuffer);
-        transactions = parsePdfText(data.text);
+        statementText = data.text;
       }
     } else {
       return res.status(400).json({
@@ -275,6 +276,8 @@ export const uploadStatement = async (req, res) => {
         message: "Unsupported file type. Upload a PDF or CSV statement.",
       });
     }
+
+    const transactions = await generateGeminiTransactions(statementText);
 
     if (transactions.length === 0) {
       console.warn("No transactions parsed from the statement file");
@@ -339,7 +342,7 @@ export const uploadStatement = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || "Failed to parse statement.",
     });

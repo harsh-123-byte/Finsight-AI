@@ -26,6 +26,7 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [insightsRefreshKey, setInsightsRefreshKey] = useState(0);
 
   useEffect(() => {
     fetchDashboardData();
@@ -61,6 +62,11 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleStatementUploaded = () => {
+    fetchDashboardData();
+    setInsightsRefreshKey((currentKey) => currentKey + 1);
   };
 
   console.log("dashboardData =", dashboardData);
@@ -133,12 +139,12 @@ const Dashboard = () => {
           })}
         />
 
-        <AIInsights />
+        <AIInsights refreshKey={insightsRefreshKey} />
       </div>
 
       {/* Statement Upload */}
       <div className="mt-10">
-        <StatementUpload />
+        <StatementUpload onUploaded={handleStatementUploaded} />
       </div>
     </DashboardLayout>
   );

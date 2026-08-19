@@ -1,3 +1,5 @@
+// This is the entry point of the server application. It imports necessary modules, loads environment variables, connects to the database, and starts the server on the specified port.
+
 import dotenv from "dotenv";
 import app from "./app.js";
 import connectDB from "./config/db.js";

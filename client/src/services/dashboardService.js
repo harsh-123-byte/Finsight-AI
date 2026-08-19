@@ -41,3 +41,26 @@ export const getTransactions = async () => {
     throw error;
   }
 };
+
+// ==========================================
+// Get Gemini Financial Insights
+// ==========================================
+export const getAIInsights = async () => {
+  try {
+    const response = await api.get("/ai/insights");
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const addTransaction = async (transaction) => {
+  const response = await api.post("/transactions", transaction);
+  return response.data;
+};
+
+export const deleteTransaction = async (transactionId) => {
+  const response = await api.delete(`/transactions/${transactionId}`);
+  return response.data;
+};

@@ -3,7 +3,7 @@ import { UploadCloud } from "lucide-react";
 import { uploadStatement } from "../../services/dashboardService";
 import { toast } from "react-hot-toast";
 
-const StatementUpload = () => {
+const StatementUpload = ({ onUploaded }) => {
   const inputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
 
@@ -21,7 +21,8 @@ const StatementUpload = () => {
 
     try {
       setUploading(true);
-      await uploadStatement(formData);
+      const response = await uploadStatement(formData);
+      onUploaded?.(response);
       toast.success("Statement uploaded successfully.");
     } catch (err) {
       console.error(err);

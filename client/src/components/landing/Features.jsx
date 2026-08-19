@@ -39,7 +39,7 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="py-28">
+    <section id="features" className="scroll-mt-20 py-28">
 
       <Container>
 

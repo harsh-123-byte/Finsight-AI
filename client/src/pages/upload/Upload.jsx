@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import DashboardLayout from "../../components/dashboard/DashboardLayout";
+import AIInsights from "../../components/dashboard/AIInsights";
 import { uploadStatement } from "../../services/dashboardService";
 import { toast } from "react-hot-toast";
 
@@ -10,6 +11,7 @@ const Upload = () => {
   const [preview, setPreview] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [transactions, setTransactions] = useState([]);
+  const [insightsRefreshKey, setInsightsRefreshKey] = useState(0);
   const navigate = useNavigate();
 
   const onDrop = (acceptedFiles) => {
@@ -45,6 +47,7 @@ const Upload = () => {
       setUploading(true);
       const response = await uploadStatement(formData);
       setTransactions(response.transactions || []);
+      setInsightsRefreshKey((currentKey) => currentKey + 1);
       toast.success("Statement parsed successfully.");
     } catch (error) {
       console.error(error);
@@ -152,6 +155,10 @@ const Upload = () => {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="mt-10">
+        <AIInsights refreshKey={insightsRefreshKey} />
       </div>
     </DashboardLayout>
   );

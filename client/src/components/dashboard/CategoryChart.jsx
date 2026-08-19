@@ -37,10 +37,7 @@ const CategoryChart = ({ data }) => {
               data={chartData}
               dataKey="value"
               nameKey="name"
-              outerRadius={100}
-              label={({ name, percent }) =>
-                `${name} (${(percent * 100).toFixed(0)}%)`
-              }
+              outerRadius="68%"
             >
               {chartData.map((entry, index) => (
                 <Cell
@@ -54,7 +51,16 @@ const CategoryChart = ({ data }) => {
               formatter={(value) => [`₹${value}`, "Amount"]}
             />
 
-            <Legend />
+            <Legend
+              layout="horizontal"
+              verticalAlign="bottom"
+              wrapperStyle={{
+                maxHeight: 72,
+                overflowY: "auto",
+                overflowX: "hidden",
+                paddingTop: 8,
+              }}
+            />
           </PieChart>
         </ResponsiveContainer>
       </div>
