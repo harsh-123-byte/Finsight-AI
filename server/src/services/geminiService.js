@@ -86,7 +86,7 @@ export const generateGeminiTransactions = async (statementText) => {
     throw error;
   }
 
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-3.6-flash";
   const text = await requestGemini(model, apiKey, {
       systemInstruction: {
         parts: [{
@@ -115,7 +115,7 @@ export const generateGeminiInsights = async (financialData) => {
     throw error;
   }
 
-  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-3.6-flash";
   const text = await requestGemini(model, apiKey, {
       systemInstruction: {
         parts: [{

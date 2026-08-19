@@ -150,8 +150,8 @@ CLIENT_URL=http://localhost:5173
 
 GEMINI_API_KEY=your_gemini_api_key
 
-# Optional, defaults to gemini-2.5-flash
-GEMINI_MODEL=gemini-2.5-flash
+# Optional, defaults to gemini-3.6-flash
+GEMINI_MODEL=gemini-3.6-flash
 ```
 
 ---
@@ -180,7 +180,7 @@ MONGO_URI=your_mongodb_connection
 JWT_SECRET=your_secret_key
 CLIENT_URL=https://your-frontend-domain.vercel.app
 GEMINI_API_KEY=your_gemini_api_key
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.6-flash
 ```
 
 After saving the variables, trigger a new deployment. The frontend must be built with the deployed backend URL:
