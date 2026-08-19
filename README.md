@@ -162,6 +162,12 @@ GEMINI_MODEL=gemini-2.5-flash
 VITE_API_URL=http://localhost:5000/api
 ```
 
+For Vercel, set `VITE_API_URL` to the backend API root, including `/api`:
+
+```env
+VITE_API_URL=https://finsight-ai-backend-wbww.onrender.com/api
+```
+
 ## Render Deployment
 
 The backend must receive its environment variables from the Render service settings. Do not commit `server/.env` or place `GEMINI_API_KEY` in the client environment.
