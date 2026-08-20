@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 
+const aiInsightSchema = new mongoose.Schema(
+  {
+    type: String,
+    title: String,
+    text: String,
+    action: String,
+  },
+  { _id: false }
+);
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -47,15 +57,7 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     aiInsights: {
-      type: [
-        {
-          _id: false,
-          type: String,
-          title: String,
-          text: String,
-          action: String,
-        },
-      ],
+      type: [aiInsightSchema],
       default: [],
     },
   },
