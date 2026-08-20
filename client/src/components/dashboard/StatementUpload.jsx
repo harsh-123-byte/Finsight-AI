@@ -1,15 +1,10 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { UploadCloud } from "lucide-react";
 import { uploadStatement } from "../../services/dashboardService";
 import { toast } from "react-hot-toast";
 
 const StatementUpload = ({ onUploaded }) => {
-  const inputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
-
-  const handleBrowse = () => {
-    inputRef.current?.click();
-  };
 
   const handleFile = async (e) => {
     const file = e.target.files?.[0];
@@ -45,20 +40,19 @@ const StatementUpload = ({ onUploaded }) => {
       <p className="mt-3 text-slate-400">Drag & Drop your PDF or CSV file here</p>
 
       <input
-        ref={inputRef}
+        id="dashboard-statement-file"
         type="file"
-        accept=".pdf,.csv,application/pdf,text/csv"
-        className="hidden"
+        accept=".pdf,.csv,application/pdf,text/csv,application/vnd.ms-excel"
+        className="sr-only"
         onChange={handleFile}
       />
 
-      <button
-        onClick={handleBrowse}
-        disabled={uploading}
-        className="mt-8 rounded-xl bg-blue-600 px-6 py-3 font-semibold transition hover:bg-blue-700 disabled:opacity-60"
+      <label
+        htmlFor="dashboard-statement-file"
+        className={`mt-8 inline-block rounded-xl bg-blue-600 px-6 py-3 font-semibold transition hover:bg-blue-700 ${uploading ? "pointer-events-none opacity-60" : "cursor-pointer"}`}
       >
         {uploading ? "Uploading..." : "Browse File"}
-      </button>
+      </label>
     </div>
   );
 };

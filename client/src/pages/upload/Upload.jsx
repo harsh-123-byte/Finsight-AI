@@ -28,6 +28,7 @@ const Upload = () => {
     accept: {
       "application/pdf": [".pdf"],
       "text/csv": [".csv"],
+      "application/vnd.ms-excel": [".csv"],
     },
     maxFiles: 1,
   });
@@ -96,6 +97,12 @@ const Upload = () => {
             <p className="text-sm text-slate-500">
               Supported formats: PDF, CSV
             </p>
+            <button
+              type="button"
+              className="rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-700"
+            >
+              Choose File
+            </button>
             {preview && (
               <span className="rounded-full bg-slate-800 px-4 py-2 text-sm text-slate-300">
                 {preview}
