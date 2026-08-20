@@ -46,6 +46,18 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    aiInsights: {
+      type: [
+        {
+          _id: false,
+          type: String,
+          title: String,
+          text: String,
+          action: String,
+        },
+      ],
+      default: [],
+    },
   },
   {
     timestamps: true,

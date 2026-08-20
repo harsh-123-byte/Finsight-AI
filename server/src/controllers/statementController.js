@@ -4,6 +4,7 @@ const require = createRequire(import.meta.url);
 const pdfParseModule = require("pdf-parse");
 const pdfParse = pdfParseModule && pdfParseModule.default ? pdfParseModule.default : pdfParseModule;
 import Transaction from "../models/Transaction.js";
+import User from "../models/User.js";
 import { generateGeminiTransactions } from "../services/geminiService.js";
 
 let pdfjsLib = null;
@@ -334,6 +335,10 @@ export const uploadStatement = async (req, res) => {
     );
 
     console.log("Inserted transactions:", createdTransactions.length);
+
+    await User.findByIdAndUpdate(req.user.id, {
+      $set: { aiInsights: [] },
+    });
 
     res.status(201).json({
       success: true,

@@ -1,4 +1,5 @@
 import Transaction from "../models/Transaction.js";
+import User from "../models/User.js";
 
 // ===============================
 // Add Transaction
@@ -14,6 +15,10 @@ export const addTransaction = async (req, res) => {
       amount,
       category,
       type,
+    });
+
+    await User.findByIdAndUpdate(req.user.id, {
+      $set: { aiInsights: [] },
     });
 
     res.status(201).json({
@@ -106,6 +111,10 @@ export const updateTransaction = async (req, res) => {
       });
     }
 
+    await User.findByIdAndUpdate(req.user.id, {
+      $set: { aiInsights: [] },
+    });
+
     res.status(200).json({
       success: true,
       transaction,
@@ -134,6 +143,10 @@ export const deleteTransaction = async (req, res) => {
         message: "Transaction not found",
       });
     }
+
+    await User.findByIdAndUpdate(req.user.id, {
+      $set: { aiInsights: [] },
+    });
 
     res.status(200).json({
       success: true,

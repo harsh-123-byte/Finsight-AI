@@ -133,6 +133,7 @@ export const updateMe = async (req, res) => {
       currency: req.body.currency,
       monthlyBudget: req.body.monthlyBudget,
       savingsGoal: req.body.savingsGoal,
+      aiInsights: [],
     };
 
     const user = await User.findByIdAndUpdate(
