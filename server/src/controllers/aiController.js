@@ -11,7 +11,7 @@ export const getAIInsights = async (req, res) => {
     const userId = user.id;
     const currency = user.currency || "INR";
 
-    if (user.aiInsights?.length) {
+    if (user.aiInsightsProvider === "gemini" && user.aiInsights?.length) {
       return res.status(200).json({
         success: true,
         provider: "cache",
@@ -52,9 +52,19 @@ export const getAIInsights = async (req, res) => {
       insights = generateFallbackInsights(transactions, currency);
     }
 
-    await User.findByIdAndUpdate(userId, {
-      $set: { aiInsights: insights },
-    });
+    if (provider === "gemini") {
+      await User.findByIdAndUpdate(userId, {
+        $set: {
+          aiInsights: insights,
+          aiInsightsProvider: "gemini",
+        },
+      });
+    } else {
+      await User.findByIdAndUpdate(userId, {
+        $set: { aiInsights: [] },
+        $unset: { aiInsightsProvider: 1 },
+      });
+    }
 
     res.status(200).json({ success: true, provider, insights });
   } catch (error) {

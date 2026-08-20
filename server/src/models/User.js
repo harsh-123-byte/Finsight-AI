@@ -60,6 +60,11 @@ const userSchema = new mongoose.Schema(
       type: [aiInsightSchema],
       default: [],
     },
+    aiInsightsProvider: {
+      type: String,
+      enum: ["gemini"],
+      default: undefined,
+    },
   },
   {
     timestamps: true,
