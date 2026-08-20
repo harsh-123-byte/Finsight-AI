@@ -4,7 +4,6 @@ import Features from "../../components/landing/Features";
 import Stats from "../../components/landing/Stats";
 import Container from "../../components/common/Container";
 import SectionTitle from "../../components/common/SectionTitle";
-import Card from "../../components/common/Card";
 
 const Landing = () => {
   return (
@@ -13,39 +12,6 @@ const Landing = () => {
       <Hero />
       <Features />
       <Stats />
-
-      <section id="pricing" className="scroll-mt-20 py-28">
-        <Container>
-          <SectionTitle
-            title="Simple pricing for clearer decisions"
-            subtitle="Start with the tools you need to understand your money, then grow into deeper AI guidance."
-          />
-
-          <div className="mx-auto mt-16 grid max-w-4xl gap-8 md:grid-cols-2">
-            <Card>
-              <p className="text-sm font-semibold uppercase tracking-widest text-blue-400">Free</p>
-              <h2 className="mt-4 text-4xl font-bold">₹0</h2>
-              <p className="mt-3 text-slate-400">Essential tracking for getting started.</p>
-              <ul className="mt-8 space-y-3 text-slate-300">
-                <li>Statement uploads</li>
-                <li>Transaction history</li>
-                <li>Dashboard summaries</li>
-              </ul>
-            </Card>
-
-            <Card className="border-blue-500/60">
-              <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">Premium</p>
-              <h2 className="mt-4 text-4xl font-bold">₹499 <span className="text-base font-normal text-slate-500">/ month</span></h2>
-              <p className="mt-3 text-slate-400">Deeper guidance for active planning.</p>
-              <ul className="mt-8 space-y-3 text-slate-300">
-                <li>Personalized Gemini insights</li>
-                <li>Budget and savings guidance</li>
-                <li>Advanced analytics</li>
-              </ul>
-            </Card>
-          </div>
-        </Container>
-      </section>
 
       <section id="about" className="scroll-mt-20 border-t border-slate-800/70 py-28">
         <Container>

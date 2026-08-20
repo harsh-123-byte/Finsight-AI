@@ -11,6 +11,7 @@ import {
   LogOut,
   PanelLeftClose,
   PanelLeftOpen,
+  X,
 } from "lucide-react";
 
 const menuItems = [
@@ -41,7 +42,7 @@ const menuItems = [
   },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ mobileOpen = false, onClose = () => {} }) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const navigate = useNavigate();
@@ -59,11 +60,20 @@ const Sidebar = () => {
   };
 
   return (
-    <aside
-      className={`sticky top-0 h-screen border-r border-slate-800 bg-slate-900 transition-all duration-300 ${
-        collapsed ? "w-24" : "w-72"
-      }`}
-    >
+    <>
+      {mobileOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation"
+          onClick={onClose}
+          className="fixed inset-0 z-40 bg-slate-950/70 lg:hidden"
+        />
+      )}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 h-screen w-72 border-r border-slate-800 bg-slate-900 transition-transform duration-300 lg:sticky lg:z-auto lg:block lg:translate-x-0 lg:transition-[width] ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full"
+        } ${collapsed ? "lg:w-24" : "lg:w-72"}`}
+      >
       {/* Header */}
       <div className="flex items-center justify-between p-6">
         {!collapsed && (
@@ -85,6 +95,9 @@ const Sidebar = () => {
             <PanelLeftClose size={22} />
           )}
         </button>
+        <button type="button" onClick={onClose} className="rounded-lg p-2 hover:bg-slate-800 lg:hidden" aria-label="Close navigation">
+          <X size={22} />
+        </button>
       </div>
 
       {/* Navigation */}
@@ -96,6 +109,7 @@ const Sidebar = () => {
             <NavLink
               key={item.title}
               to={item.path}
+              onClick={onClose}
               className={({ isActive }) =>
                 `mb-3 flex w-full items-center gap-4 rounded-xl px-4 py-3 transition-all ${
                   isActive
@@ -127,7 +141,8 @@ const Sidebar = () => {
           {!collapsed && "Logout"}
         </button>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 };
 

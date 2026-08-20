@@ -4,13 +4,14 @@ import {
   ChevronDown,
   UserCircle2,
   CalendarDays,
+  Menu,
 } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { logoutUser } from "../../services/authService";
 
-const Topbar = ({ searchQuery, onSearchChange }) => {
+const Topbar = ({ searchQuery, onSearchChange, onMenuClick }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const { user, logout } = useAuth();
 
@@ -48,14 +49,19 @@ const Topbar = ({ searchQuery, onSearchChange }) => {
       : "Good Evening";
 
   return (
-    <header className="flex items-center justify-between border-b border-slate-800 bg-slate-900 px-8 py-5">
+    <header className="flex items-center justify-between gap-3 border-b border-slate-800 bg-slate-900 px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
       {/* Left Side */}
-      <div>
-        <h2 className="text-2xl font-bold">
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <button type="button" onClick={onMenuClick} className="rounded-lg p-2 hover:bg-slate-800 lg:hidden" aria-label="Open navigation">
+            <Menu size={22} />
+          </button>
+          <h2 className="truncate text-lg font-bold sm:text-2xl">
           {greeting}, {user?.name || "User"} 👋
-        </h2>
+          </h2>
+        </div>
 
-        <div className="mt-2 flex items-center gap-2 text-sm text-slate-400">
+        <div className="mt-2 hidden items-center gap-2 text-sm text-slate-400 sm:flex">
           <CalendarDays size={16} />
           <span>{today}</span>
         </div>

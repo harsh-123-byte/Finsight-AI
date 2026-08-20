@@ -23,7 +23,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative overflow-hidden py-24">
+    <section className="relative overflow-hidden py-14 sm:py-20 lg:py-24">
       {/* Background Glow */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div
@@ -54,7 +54,7 @@ const Hero = () => {
       </div>
 
       <Container>
-        <div className="grid items-center gap-16 lg:grid-cols-2">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {/* LEFT */}
           <motion.div
             initial={{ opacity: 0, x: -60 }}
@@ -63,7 +63,7 @@ const Hero = () => {
           >
             <Badge>✨ AI Powered Finance</Badge>
 
-            <h1 className="mt-6 text-5xl font-black leading-tight lg:text-7xl">
+            <h1 className="mt-6 text-4xl font-black leading-tight sm:text-5xl lg:text-7xl">
               Track Every
               <span className="text-blue-500"> Rupee.</span>
               <br />
@@ -75,7 +75,7 @@ const Hero = () => {
               subscriptions. Receive AI-powered financial insights in seconds.
             </p>
 
-            <div className="mt-10 flex gap-4">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
               <Button onClick={handleGetStarted}>Get Started</Button>
 
               <Button variant="secondary">Watch Demo</Button>
@@ -91,9 +91,9 @@ const Hero = () => {
               delay: 0.2,
             }}
           >
-            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-2xl">
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-4 shadow-2xl sm:p-6">
               {/* Metric Cards */}
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4">
                 <MetricCard
                   title="Income"
                   value="₹85K"

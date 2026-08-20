@@ -14,7 +14,7 @@ const AuthLayout = ({ title, subtitle, children }) => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}
           >
-            <h1 className="text-6xl font-black leading-tight">
+            <h1 className="text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">
 
               Manage Your
 
