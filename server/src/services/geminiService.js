@@ -81,7 +81,11 @@ const requestGemini = async (model, apiKey, body) => {
     }
 
     const error = new Error(providerMessage || "Gemini request failed");
-    error.statusCode = response.status >= 500 ? 502 : 503;
+    error.statusCode = response.status === 429
+      ? 429
+      : response.status >= 500
+      ? 502
+      : 503;
     throw error;
   }
 
@@ -145,4 +149,55 @@ export const generateGeminiInsights = async (financialData) => {
   });
 
   return parseInsights(text);
+};
+
+export const generateFallbackInsights = (transactions, currency = "INR") => {
+  const income = transactions
+    .filter((transaction) => transaction.type === "income")
+    .reduce((total, transaction) => total + Number(transaction.amount || 0), 0);
+  const expenses = transactions
+    .filter((transaction) => transaction.type !== "income")
+    .reduce((total, transaction) => total + Number(transaction.amount || 0), 0);
+  const categoryTotals = transactions
+    .filter((transaction) => transaction.type !== "income")
+    .reduce((totals, transaction) => {
+      const category = transaction.category || "Others";
+      totals[category] = (totals[category] || 0) + Number(transaction.amount || 0);
+      return totals;
+    }, {});
+  const topCategory = Object.entries(categoryTotals).sort(([, first], [, second]) => second - first)[0];
+  const largestExpense = transactions
+    .filter((transaction) => transaction.type !== "income")
+    .sort((first, second) => Number(second.amount || 0) - Number(first.amount || 0))[0];
+  const formatAmount = (amount) => `${currency} ${amount.toLocaleString()}`;
+  const insights = [];
+
+  if (income > 0 || expenses > 0) {
+    insights.push({
+      type: expenses > income ? "risk" : "pattern",
+      title: expenses > income ? "Expenses are above income" : "Cash flow is positive",
+      text: `Recorded income is ${formatAmount(income)} and expenses are ${formatAmount(expenses)} across your transactions.`,
+      action: expenses > income ? "Review your largest expense categories this month." : "Keep monitoring expenses to protect your surplus.",
+    });
+  }
+
+  if (topCategory) {
+    insights.push({
+      type: "pattern",
+      title: `${topCategory[0]} is your top spending category`,
+      text: `You have spent ${formatAmount(topCategory[1])} in ${topCategory[0]}, more than any other recorded category.`,
+      action: `Set a spending limit for ${topCategory[0]} and review it weekly.`,
+    });
+  }
+
+  if (largestExpense) {
+    insights.push({
+      type: "opportunity",
+      title: "Review your largest expense",
+      text: `${largestExpense.description} is your largest recorded expense at ${formatAmount(Number(largestExpense.amount || 0))}.`,
+      action: "Check whether this expense is recurring or can be reduced.",
+    });
+  }
+
+  return insights;
 };

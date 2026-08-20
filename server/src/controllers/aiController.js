@@ -1,5 +1,8 @@
 import Transaction from "../models/Transaction.js";
-import { generateGeminiInsights } from "../services/geminiService.js";
+import {
+  generateFallbackInsights,
+  generateGeminiInsights,
+} from "../services/geminiService.js";
 import User from "../models/User.js";
 
 export const getAIInsights = async (req, res) => {
@@ -22,26 +25,38 @@ export const getAIInsights = async (req, res) => {
       return res.status(200).json({ success: true, insights: [] });
     }
 
-    const insights = await generateGeminiInsights({
-      userName: user.name,
-      currency,
-      monthlyBudget: user.monthlyBudget || 0,
-      savingsGoal: user.savingsGoal || 0,
-      transactionCount: transactions.length,
-      transactions: transactions.map((transaction) => ({
-        date: transaction.date,
-        description: transaction.description,
-        amount: transaction.amount,
-        category: transaction.category,
-        type: transaction.type,
-      })),
-    });
+    let insights;
+    let provider = "gemini";
+
+    try {
+      insights = await generateGeminiInsights({
+        userName: user.name,
+        currency,
+        monthlyBudget: user.monthlyBudget || 0,
+        savingsGoal: user.savingsGoal || 0,
+        transactionCount: transactions.length,
+        transactions: transactions.map((transaction) => ({
+          date: transaction.date,
+          description: transaction.description,
+          amount: transaction.amount,
+          category: transaction.category,
+          type: transaction.type,
+        })),
+      });
+    } catch (error) {
+      if (error.statusCode !== 429 && !/quota|rate limit|resource exhausted/i.test(error.message)) {
+        throw error;
+      }
+
+      provider = "fallback";
+      insights = generateFallbackInsights(transactions, currency);
+    }
 
     await User.findByIdAndUpdate(userId, {
       $set: { aiInsights: insights },
     });
 
-    res.status(200).json({ success: true, provider: "gemini", insights });
+    res.status(200).json({ success: true, provider, insights });
   } catch (error) {
     console.error(error);
     res.status(error.statusCode || 500).json({ success: false, message: error.message });
