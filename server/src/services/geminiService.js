@@ -71,7 +71,18 @@ const requestGemini = async (model, apiKey, body) => {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.error?.message || "Gemini request failed");
+    const providerMessage = data.error?.message || "";
+    const modelUnavailable = /model.*(not found|not supported|invalid)|unknown model/i.test(
+      providerMessage
+    );
+
+    if ((response.status === 400 || response.status === 404) && modelUnavailable && model !== "gemini-2.5-flash") {
+      return requestGemini("gemini-2.5-flash", apiKey, body);
+    }
+
+    const error = new Error(providerMessage || "Gemini request failed");
+    error.statusCode = response.status >= 500 ? 502 : 503;
+    throw error;
   }
 
   return getResponseText(data);
@@ -86,7 +97,7 @@ export const generateGeminiTransactions = async (statementText) => {
     throw error;
   }
 
-  const model = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   const text = await requestGemini(model, apiKey, {
       systemInstruction: {
         parts: [{
@@ -115,7 +126,7 @@ export const generateGeminiInsights = async (financialData) => {
     throw error;
   }
 
-  const model = process.env.GEMINI_MODEL || "gemini-3.6-flash";
+  const model = process.env.GEMINI_MODEL || "gemini-2.5-flash";
   const text = await requestGemini(model, apiKey, {
       systemInstruction: {
         parts: [{

@@ -32,6 +32,13 @@ const protect = async (
       decoded.id
     ).select("-password");
 
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "User account not found",
+      });
+    }
+
     next();
   } catch (error) {
     return res.status(401).json({

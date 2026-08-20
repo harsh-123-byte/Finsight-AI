@@ -150,8 +150,8 @@ CLIENT_URL=http://localhost:5173
 
 GEMINI_API_KEY=your_gemini_api_key
 
-# Optional, defaults to gemini-3.6-flash
-GEMINI_MODEL=gemini-3.6-flash
+# Optional, defaults to gemini-2.5-flash
+GEMINI_MODEL=gemini-2.5-flash
 ```
 
 ---
