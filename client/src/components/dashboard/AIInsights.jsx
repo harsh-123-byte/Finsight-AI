@@ -5,22 +5,29 @@ import api from "../../services/api";
 const AIInsights = ({ refreshKey = 0 }) => {
   const [insights, setInsights] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
     const fetchInsights = async () => {
       try {
         setLoading(true);
+        setError("");
         const response = await api.get("/ai/insights");
         setInsights(response.data.insights || []);
       } catch (err) {
         console.error("AI Insights error", err);
+        setError(
+          err.response?.data?.message ||
+            "Unable to load AI insights. Please try again."
+        );
       } finally {
         setLoading(false);
       }
     };
 
     fetchInsights();
-  }, [refreshKey]);
+  }, [refreshKey, retryKey]);
 
   const iconByType = {
     pattern: TrendingUp,
@@ -40,8 +47,21 @@ const AIInsights = ({ refreshKey = 0 }) => {
 
       {loading ? (
         <p className="text-slate-400">Generating insights...</p>
+      ) : error ? (
+        <div>
+          <p className="text-red-300">{error}</p>
+          <button
+            type="button"
+            onClick={() => setRetryKey((currentKey) => currentKey + 1)}
+            className="mt-4 text-sm font-semibold text-blue-300 hover:text-blue-200"
+          >
+            Try again
+          </button>
+        </div>
       ) : insights.length === 0 ? (
-        <p className="text-slate-400">No insights available yet.</p>
+        <p className="text-slate-400">
+          Add some transactions to generate personalized insights.
+        </p>
       ) : (
         <div className="max-h-[36rem] space-y-5 overflow-y-auto pr-2">
           {insights.map((item, idx) => {

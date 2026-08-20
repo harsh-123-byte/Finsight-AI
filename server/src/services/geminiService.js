@@ -27,7 +27,7 @@ const parseInsights = (text) => {
         action: String(insight.action || "").trim(),
         type: String(insight.type || "observation").trim(),
       }))
-    .filter((insight) => insight.text.length > 0 && insight.action.length > 0)
+    .filter((insight) => insight.text.length > 0)
     .filter((insight, index, allInsights) => (
       allInsights.findIndex((candidate) => candidate.text === insight.text) === index
     ));
